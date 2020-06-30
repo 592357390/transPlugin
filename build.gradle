@@ -1,0 +1,109 @@
+apply plugin: 'groovy'
+apply plugin: 'maven' // add this line
+
+
+buildscript {
+
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url uri("http://nexus.tttinner.com:8888/nexus/content/repositories/releases/")
+            credentials {
+                username = "yuangang.wang"
+                password = "Abu0ln9vrD91e0m"
+            }
+        }
+//        maven {
+//            url 'file://C://repo/'
+//        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.language.trans:plugin:1.0.3'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi() //gradle sdk
+    compile localGroovy() //groovy sdk
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
+    compile 'org.apache.httpcomponents:httpclient:4.5.5'
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+
+        repository(url: "http://nexus.tttinner.com:8888/nexus/content/repositories/releases/") {
+            authentication(
+                    userName: "yuangang.wang",
+                    password: "Abu0ln9vrD91e0m")
+        }
+
+//        repository(url: uri('../repo'))
+        pom.groupId = 'com.language.trans'
+        pom.artifactId = 'plugin'
+        pom.version = '1.0.6'
+    }
+}
+//
+
+
+//
+//task t2{
+//    def props = new Properties()
+//    File file = project.rootProject.file('local.properties')
+//    if (file.exists()) {
+//        props.load(file.newReader("UTF-8")) // 解决 gradle properties 中文乱码
+//    }
+//    def value = "false"
+//    println(props.getProperty("transSwitch"))
+//}
+
+
+//// 自定义任务
+//task t1 {
+//    println 't1 configuration'
+//    doLast {
+//        println 't1 execute doLast'
+//    }
+//    doFirst {
+//        println 't1 execute doFirst'
+//    }
+//}
+//// 钩子方法
+//gradle.afterProject {
+//    println '配置阶段 afterProject'
+//}
+//project.beforeEvaluate {
+//    println '配置阶段 beforeEvaluate'
+//}
+//gradle.projectsEvaluated {
+//    println '配置阶段 projectsEvaluated'
+//}
+//project.afterEvaluate {
+//    println '配置阶段 afterEvaluate'
+//}
+//gradle.taskGraph.whenReady {
+//    println '配置任务 whenReady'
+//}
+//
+//// 执行阶段
+//gradle.taskGraph.beforeTask {
+//    println "执行阶段 before task"
+//}
+//gradle.taskGraph.afterTask {
+//    println "执行阶段 afterTask "
+//}
+//gradle.buildFinished {
+//    println '构建结束 buildFinished'
+//}
